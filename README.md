@@ -5,10 +5,8 @@ Start Docker
 
 
 
-Question
+We may have many docker images. **Can we start one of them with a shortcut ?**
 ----
-> We may have many docker images. **Can we start one of them with a shortcut ?**
-
 
 
 Install
