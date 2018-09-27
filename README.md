@@ -4,8 +4,7 @@ Start Docker
 ![Docker](docker.jpeg)
 
 
-
-We may have many docker images. **Can we start one of them with a shortcut ?**
+Can we start docker images with a shortcut ?
 ----
 
 
