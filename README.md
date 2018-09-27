@@ -18,7 +18,7 @@ Install
 **PS：** 
 * Please replace **nvidia-docker** with **docker** in start_docker if you do not use nivida-docker.
 * Current directory is mounted on /data of docker.
-* Host and container share port 8000, 8888..
+* Host and container share port 8000, 8888.
 
 
 
