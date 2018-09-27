@@ -1,0 +1,48 @@
+#/************************************************************************************
+#***
+#***	File Author: Dell, 2018-07-18 18:29:54
+#***
+#************************************************************************************/
+#
+#!/bin/bash
+
+function docker_images()
+{
+	ALL=""
+	sudo docker images | grep -v TAG | \
+	while read line ;
+	do
+		n=`echo $line | awk '{print $1}'`
+		t=`echo $line | awk '{print $2}'`
+
+		echo $n:$t
+	done
+}
+
+function show_docker_images()
+{
+	echo "----------------------------------------------------------------------------------------------------"
+	sudo docker images
+	echo "----------------------------------------------------------------------------------------------------"
+}
+
+
+function choice_docker_image()
+{
+	DOCKER_IMAGES=`docker_images`
+	select c in $DOCKER_IMAGES ; do
+		break;
+	done
+	echo $c
+}
+
+sudo echo
+
+show_docker_images
+c=`choice_docker_image`
+
+[ "$c" = "" ] && exit 1
+
+DATA=`pwd`
+sudo nvidia-docker run -it -v $DATA:/data -p 8000:8000 -p 8888:8888 $c /bin/bash
+
