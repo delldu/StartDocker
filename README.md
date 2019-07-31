@@ -14,8 +14,20 @@ Install
 
 **PS：** 
 * Please replace **nvidia-docker** with **docker** in start_docker if you do not use nivida-docker.
+
 * Current directory is mounted on /data of docker.
+
 * Host and container share port 8000, 8888.
+
+* Please run command "xhost +" before start_docker if you want to use x-windows applications in docker, test this feature with following commands in docker environment (Base on ubuntu system):
+
+  `apt-get update`
+
+  `apt-get install xarclock`
+
+  `xarclock`
+
+   
 
 
 
@@ -30,10 +42,4 @@ Run
 License
 ----
 StartDocker is released under the [Apache 2.0 license]
-
-
-
-Chinese Document
-----
-**一键启动Docker.**
 

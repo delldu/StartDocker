@@ -44,5 +44,10 @@ c=`choice_docker_image`
 [ "$c" = "" ] && exit 1
 
 DATA=`pwd`
-sudo nvidia-docker run -it -v $DATA:/data -p 8000:8000 -p 8888:8888 $c /bin/bash
+sudo nvidia-docker run -it \
+	-v $DATA:/data \
+	-e DISPLAY=unix$DISPLAY \
+	-v /tmp/.X11-unix:/tmp/.X11-unix \
+	-p 8000:8000 -p 8888:8888 \
+	$c /bin/bash
 
