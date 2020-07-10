@@ -44,7 +44,7 @@ c=`choice_docker_image`
 [ "$c" = "" ] && exit 1
 
 DATA=`pwd`
-sudo nvidia-docker run -it \
+sudo docker run -it --gpus all \
 	-v $DATA:/data \
 	-e DISPLAY=unix$DISPLAY \
 	-v /tmp/.X11-unix:/tmp/.X11-unix \
