@@ -6,6 +6,7 @@ WORKDIR /build_workspace
 
 RUN apt-get -y update && \
 	apt-get install -y \
+	apt-utils \
 	gcc g++ \
 	make autoconf libtool cmake automake ninja-build \
 	git \
@@ -42,7 +43,7 @@ RUN apt-get install -y intltool gettext && \
 RUN git clone https://gitlab.gnome.org/GNOME/babl.git
 # Build babl
 RUN cd babl && \
-	mkdir build && \
+	mkdir -p build && \
 	cd build && \
 	meson --prefix=/usr .. && \
 	ninja && ninja install && \
@@ -56,8 +57,16 @@ RUN apt-get install -y libglib2.0-dev libjson-glib-dev && \
 	apt-get clean
 
 # Build gegl
+# https://gitlab.gnome.org/GNOME/gegl/-/issues/188
+# export XDG_DATA_DIRS="$XDG_DATA_DIRS:$BABL_PREFIX/share:/usr/local/share/:/usr/share/"
+# export PKG_CONFIG_PATH=$BABL_PREFIX/lib/pkgconfig
+# export LD_LIBRARY_PATH="$BABL_PREFIX/lib:$LD_LIBRARY_PATH"
+
+# meson -Dprefix="$BABL_PREFIX" $CONFIG_OPTIONS _build
+
+
 RUN cd gegl && \
-	mkdir build && \
+	mkdir -p build && \
 	cd build && \
 	meson --prefix=/usr .. && \
 	ninja && ninja install && \
