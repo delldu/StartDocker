@@ -4,33 +4,33 @@ MAINTAINER Dell Du <18588220928@163.com>
 ENV DEBIAN_FRONTEND=noninteractive
 WORKDIR /build_workspace
 
-RUN apt-get -y update
-RUN apt install -y \
+RUN apt-get -y update && \
+	apt-get install -y \
 	gcc g++ \
 	make autoconf libtool cmake automake ninja-build \
 	git \
 	python3-setuptools python3-pip && \
-	apt clean
+	apt-get clean
 
 # Install meson
 RUN python3 -m pip install meson==0.54.0 && cp /usr/local/bin/meson /usr/bin/
 
 # Refrence 9, Hard dependencies 
-RUN apt install -y libpng-dev libjpeg-dev libtiff-dev liblcms2-dev && \
-	apt clean
+RUN apt-get install -y libpng-dev libjpeg-dev libtiff-dev liblcms2-dev && \
+	apt-get clean
 
 #   1. You need to have installed a recent version of pkg-config (>= 3.0) available
 #      from https://www.freedesktop.org/software/pkgconfig/.
-RUN apt install -y pkg-config && \
-	apt clean
+RUN apt-get install -y pkg-config && \
+	apt-get clean
 
 #   2. You need intltool (at least 0.40.1, but preferably a newer version).
 #      Intltool can be downloaded from
 #      https://ftp.gnome.org/pub/gnome/sources/intltool/
 #      You also need gettext version 0.19 or over. Earlier gettext had
 #      issues with script-fu localization, ending up in incomplete GIMP localization.
-RUN apt install -y intltool gettext && \
-	apt clean
+RUN apt-get install -y intltool gettext && \
+	apt-get clean
 
 #   3. You need to have GEGL version 0.4.28 or newer and babl version
 #      0.1.74 or newer. You can get them from https://gegl.org/ or clone
@@ -41,23 +41,27 @@ RUN apt install -y intltool gettext && \
 
 RUN git clone https://gitlab.gnome.org/GNOME/babl.git
 # Build babl
-RUN cd babl && 
+RUN cd babl && \
 	mkdir build && \
+	cd build && \
 	meson --prefix=/usr .. && \
-	ninja && ninja install && cd .. && \
+	ninja && ninja install && \
+	cd .. && \
 	rm -rf build && \
 	cd ..
 
 RUN git clone https://gitlab.gnome.org/GNOME/gegl.git
 # Build dependencies
-RUN apt install -y libglib2.0-dev libjson-glib-dev && \
-	apt clean
+RUN apt-get install -y libglib2.0-dev libjson-glib-dev && \
+	apt-get clean
 
 # Build gegl
 RUN cd gegl && \
 	mkdir build && \
+	cd build && \
 	meson --prefix=/usr .. && \
-	ninja && ninja install && cd .. && \
+	ninja && ninja install && \
+	cd .. && \
 	rm -rf build && \
 	cd ..
 
@@ -66,13 +70,13 @@ RUN cd gegl && \
 #      (>= 2.30.8), and Pango (>= 1.44.0). Sources for these can be grabbed
 #      from ftp://ftp.gtk.org/.
 
-RUN apt install -y libgtk-3-0 libgdk-pixbuf2.0-common libpango-1.0-0 && \
-	apt clean
+RUN apt-get install -y libgtk-3-0 libgdk-pixbuf2.0-common libpango-1.0-0 && \
+	apt-get clean
 
 #   5. We use cairo >= 1.14.0, which is hosted at
 #      https://www.cairographics.org/.
-RUN apt install -y libcairo2 && \
-	apt clean
+RUN apt-get install -y libcairo2 && \
+	apt-get clean
 
 #   6. We require PangoCairo, a Pango backend using Cairo. Make sure you
 #      have Cairo, FreeType2 and fontconfig installed before you compile
@@ -85,22 +89,22 @@ RUN apt install -y libcairo2 && \
 #      will likely have it installed, but you may have to install a
 #      development package for the headers.
 
-RUN apt install -y libpangocairo-1.0-0 libfreetype-dev fontconfig libharfbuzz-dev && \
-	apt clean
+RUN apt-get install -y libpangocairo-1.0-0 libfreetype-dev fontconfig libharfbuzz-dev && \
+	apt-get clean
 
 #   7. The file-compressor plug-in requires zlib, libbzip2, and liblzma to
 #      be installed. All these libraries are required dependencies.
-RUN apt install -y zlib1g-dev libbz2-dev liblzma-dev && \
-	apt clean
+RUN apt-get install -y zlib1g-dev libbz2-dev liblzma-dev && \
+	apt-get clean
 
 #   8. For metadata access GIMP requires the gexiv2 0.10.6 or newer library.
 #      It is hosted at: https://wiki.gnome.org/Projects/gexiv2
-RUN apt install -y libgexiv2-dev && \
-	apt clean
+RUN apt-get install -y libgexiv2-dev && \
+	apt-get clean
 
 #   9. libpng, libjpeg, libtiff and lcms are hard dependencies that can
 #      not be disabled.
-# RUN apt install -y libpng-dev libjpeg-dev libtiff-dev liblcms2-dev
+# RUN apt-get install -y libpng-dev libjpeg-dev libtiff-dev liblcms2-dev
 
 #  10. For MyPaint brushes, brushlib (libmypaint) 1.3.0 is used.
 #      The libmypaint repository is hosted at:
@@ -115,8 +119,8 @@ RUN apt install -y libgexiv2-dev && \
 #      and has no stable release at time of writing).
 
 # Build dependencies
-RUN apt install -y libjson-c-dev libtool && \
-	apt clean
+RUN apt-get install -y libjson-c-dev libtool && \
+	apt-get clean
 RUN git clone https://github.com/mypaint/libmypaint
 # Build libmypaint
 RUN cd libmypaint && \
@@ -148,9 +152,9 @@ RUN cd mypaint-brushes && \
 #      that are needed for some of the available plug-ins. We recommend
 #      to check that the following libraries are installed: openjpeg,
 #      webkit, libmng, librsvg, libwmf, libaa and libgs (Ghostscript).
-RUN apt install -y libopenjp2-7-dev libwebkit2gtk-4.0-dev libmng-dev librsvg2-dev \
+RUN apt-get install -y libopenjp2-7-dev libwebkit2gtk-4.0-dev libmng-dev librsvg2-dev \
 	libwmf-dev libaa1-dev libgs-dev && \
-	apt clean
+	apt-get clean
 
 #  13. HEIF support depends on the libheif library. If you don't have
 #      access to pre-built packages, the code is available at:
@@ -160,24 +164,24 @@ RUN apt install -y libopenjp2-7-dev libwebkit2gtk-4.0-dev libmng-dev librsvg2-de
 #      respectively decoding and encoding of HEVC, i.e. HEIC files), and
 #      libaom decoder and encoder (for AV1, i.e. AVIF files), otherwise
 #      the plug-in is mostly useless.
-RUN apt install -y libheif-dev && \
-	apt clean
+RUN apt-get install -y libheif-dev && \
+	apt-get clean
 
 #  14. GObject Introspection requires the following dependencies to be
 #      built and installed with introspection as well: babl, cairo,
 #      GdkPixbuf, GEGL, GIO, GLib, GObject and GTK+.
-RUN apt install -y gobject-introspection && \
-	apt clean
+RUN apt-get install -y gobject-introspection && \
+	apt-get clean
 
 #  19. Summary of required packages and what version you need:
-RUN apt install -y libappstream-glib-dev libgtk-3-dev libgtk-3-bin libpoppler-glib-dev poppler-data && \
-	apt clean
+RUN apt-get install -y libappstream-glib-dev libgtk-3-dev libgtk-3-bin libpoppler-glib-dev poppler-data && \
+	apt-get clean
 
 #  20. Summary of optional packages:
-RUN apt install -y libgirepository1.0-dev valac && \
-	apt clean
+RUN apt-get install -y libgirepository1.0-dev valac && \
+	apt-get clean
 
-RUN apt autoremove
+RUN apt-get autoremove
 
 
 
